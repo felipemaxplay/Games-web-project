@@ -1,3 +1,8 @@
+.dark-mode {
+    background-color: #15202B;
+    color: #FFFFFF;
+}
+
 #canvas1 {
     border: 5px solid black;
     position: absolute;
