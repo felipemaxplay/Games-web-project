@@ -3,6 +3,12 @@ function darkMode() {
     element.classList.toggle("dark-mode");
 };
 
+let playerState = "stand";
+const dropDown = document.getElementById("animations");
+dropDown.addEventListener('change', function(e) {
+    playerState = e.target.value;
+})
+
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
@@ -14,19 +20,75 @@ const playerImg = new Image();
 playerImg.src = "/sprite-animation/assets/shadow_dog.png";
 const spriteWidth = 575;
 const spriteHeight = 523;
-let frameX = 0;
-let frameY = 0;
+//let frameX = 0;
+//let frameY = 0;
 let gameFrame = 0;
-const staggerFrame = 5;
+const staggerFrame = 6;
+const spriteAnimations = [];
+const animationStates = [
+    {
+        name: 'stand',
+        frame: 7
+    },
+    {
+        name: 'jump',
+        frame: 7
+    },
+    {
+        name: 'fall',
+        frame: 7
+    },
+    {
+        name: 'run',
+        frame: 9
+    },
+    {
+        name: 'dizzy',
+        frame: 11
+    },
+    {
+        name: 'sit',
+        frame: 5
+    },
+    {
+        name: 'roll',
+        frame: 7
+    },
+    {
+        name: 'bite',
+        frame: 7
+    },
+    {
+        name: 'ko',
+        frame: 12
+    },
+    {
+        name: 'getHit',
+        frame: 4
+    }
+];
+animationStates.forEach((state, index) => {
+    let frames = {
+        loc: []
+    }
+    for(let j = 0; j < state.frame; j++) {
+        let positionX = j * spriteWidth;
+        let positionY = index * spriteHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations[state.name] = frames;
+});
+console.log(spriteAnimations);
 
 function animate() {
-    let position = Math.floor(gameFrame / staggerFrame % 6);
-    frameX = spriteWidth * position;
-
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    ctx.drawImage(playerImg, frameX, frameY * spriteHeight, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+    let position = Math.floor(gameFrame / staggerFrame) % spriteAnimations[playerState].loc.length;
+    let frameX = spriteWidth * position;
+    let frameY = spriteAnimations[playerState].loc[position].y;
+    ctx.drawImage(playerImg, frameX, frameY, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
 
     gameFrame++;
     requestAnimationFrame(animate);
 }
+
 animate();
