@@ -1,8 +1,3 @@
-function darkMode() {
-    let element = document.body;
-    element.classList.toggle("dark-mode");
-};
-
 let playerState = "stand";
 const dropDown = document.getElementById("animations");
 dropDown.addEventListener('change', function(e) {
